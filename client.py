@@ -39,7 +39,7 @@ class Window(tk.Tk):
             self.message_display.insert(tk.INSERT, msg)
             self.message_display.see(tk.END)
             self.message_input.delete(0, tk.END)
-            print(msg)
+            # print(msg)
 
 
 if __name__ == "__main__":
