@@ -59,7 +59,6 @@ class Window(tk.Tk):
                 msg = msg.strip() + "\n"
                 self.sock.sendall(msg.encode('utf-8'))
             self.message_input.delete(0, tk.END)
-            # print(msg)
 
 
 if __name__ == "__main__":
