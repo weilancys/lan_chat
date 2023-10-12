@@ -5,9 +5,6 @@ from tkinter import ttk
 SERVER = 'localhost'
 PORT = 7777
 
-# sock = socket.socket()
-# sock.connect((SERVER, PORT))
-
 class Window(tk.Tk):
     def __init_ui(self):
         self.title("LAN Chat")
@@ -28,16 +25,39 @@ class Window(tk.Tk):
     def __init__(self):
         super().__init__()
         self.__init_ui()
+        self.connect_to_server()
+        self.after(300, self.dispatch_recv_job)
+    
+    def connect_to_server(self):
+        sock = socket.socket()
+        try:
+            sock.connect((SERVER, PORT))
+            self.title("LAN Chat - Connected")
+            self.sock = sock
+            self.sock.setblocking(False)
+        except:
+            self.title("LAN Chat - Not Connected")
+            self.sock = None
 
     def start(self):
         self.mainloop()
+    
+    def dispatch_recv_job(self):
+        if self.sock:
+            try:
+                msg = self.sock.recv(1024)
+                self.message_display.insert(tk.INSERT, msg)
+            except:
+                pass
+            finally:
+                self.after(300, self.dispatch_recv_job)
 
     def on_btn_send_click(self):
         msg = self.message_input.get()
         if msg:
-            msg = msg.strip() + "\n"
-            self.message_display.insert(tk.INSERT, msg)
-            self.message_display.see(tk.END)
+            if self.sock:
+                msg = msg.strip() + "\n"
+                self.sock.sendall(msg.encode('utf-8'))
             self.message_input.delete(0, tk.END)
             # print(msg)
 
