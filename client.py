@@ -1,6 +1,7 @@
 import socket
 import tkinter as tk
 from tkinter import ttk
+import tkinter.scrolledtext
 
 SERVER = 'localhost'
 PORT = 7777
@@ -12,10 +13,10 @@ class Window(tk.Tk):
         self.frame_messages = ttk.Frame(self)
         self.frame_input = ttk.Frame(self)
 
-        self.message_display = tk.Text(self.frame_messages)
+        self.message_display = tk.scrolledtext.ScrolledText(self.frame_messages)
         self.message_display.pack()
         self.message_input = ttk.Entry(self.frame_input)
-        self.message_input.pack()
+        self.message_input.pack() 
         self.btn_send = ttk.Button(self.frame_input, text="Send", command=self.on_btn_send_click)
         self.btn_send.pack()
 
