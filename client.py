@@ -2,6 +2,7 @@ import socket
 import tkinter as tk
 from tkinter import ttk
 import tkinter.scrolledtext
+from frame import MessageFrame
 
 SERVER = 'localhost'
 PORT = 7777
@@ -57,8 +58,9 @@ class Window(tk.Tk):
         msg = self.message_input.get()
         if msg:
             if self.sock:
-                msg = msg.strip() + "\n"
-                self.sock.sendall(msg.encode('utf-8'))
+                # msg = msg.strip() + "\n"
+                MSG = MessageFrame(msg)
+                self.sock.sendall(MSG.get_bin())
             self.message_input.delete(0, tk.END)
 
 

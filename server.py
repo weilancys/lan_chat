@@ -1,4 +1,6 @@
 from socketserver import StreamRequestHandler, ThreadingTCPServer
+import frame
+import struct
 
 HOST = 'localhost'
 PORT = 7777
@@ -9,13 +11,19 @@ class MyHandler(StreamRequestHandler):
     def handle(self):
         clients.add(self)
         while True:
-            msg = None
+            # msg = None
             try:
-                msg = self.rfile.readline()
+                header = self.rfile.read(frame.HEADER_SIZE)
+                if not header:
+                    break
+                if not header.startswith(frame.FS):
+                    continue
+                FS, version, type_, arg, length = struct.unpack(frame.HEADER_FORMAT, header)
+                msg = self.rfile.read(length)
+                if not msg:
+                    break
             except ConnectionResetError as ex:
                 print(ex)
-                break
-            if not msg:
                 break
             print(f"{self.client_address} says {msg}")
             for client in clients:
