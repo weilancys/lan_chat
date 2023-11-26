@@ -48,6 +48,7 @@ class Window(tk.Tk):
         if self.sock:
             try:
                 msg = self.sock.recv(1024)
+                msg = msg.decode('utf-8')
                 self.message_display.insert(tk.INSERT, msg)
             except:
                 pass

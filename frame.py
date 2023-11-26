@@ -1,5 +1,7 @@
 import struct
 
+ENCODING = 'utf-8'
+
 # frame start
 FS = b"LB_S"
 FE = b"LB_E"
