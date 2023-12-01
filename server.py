@@ -1,6 +1,7 @@
 from socketserver import BaseRequestHandler, StreamRequestHandler, ThreadingTCPServer
 import frame
 import struct
+from utils import recvall
 
 HOST = '0.0.0.0'
 PORT = 7777
@@ -12,14 +13,16 @@ class MyHandler(StreamRequestHandler):
         clients.add(self)
         while True:
             try:
-                header = self.rfile.read(frame.HEADER_SIZE)
+                # header = self.rfile.read(frame.HEADER_SIZE)
+                header = recvall(self.connection, frame.HEADER_SIZE)
                 if not header:
                     break
                 if not header.startswith(frame.FS):
                     continue
-                FS, version, type_, arg, length = struct.unpack(frame.HEADER_FORMAT, header)
+                FS, version, type_, args, length = struct.unpack(frame.HEADER_FORMAT, header)
 
-                payload = self.rfile.read(length)
+                # payload = self.rfile.read(length)
+                payload = recvall(self.connection, length)
                 if not payload:
                     break
 

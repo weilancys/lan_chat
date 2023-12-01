@@ -30,10 +30,10 @@ frame structure:
 """
 
 class Frame:
-    def __init__(self, type, arg, payload, version=PROTOCOL_VERSION["0.1"]):
+    def __init__(self, type, args, payload, version=PROTOCOL_VERSION["0.1"]):
         self.version = version
         self.type = type
-        self.arg = arg
+        self.args = args
         self.header_length = struct.calcsize(HEADER_FORMAT)
         self.payload = payload
         self.payload_length = len(self.payload)
@@ -47,7 +47,7 @@ class Frame:
     
     def get_bin(self):
         # return the packed binary representation of this frame
-        frame = struct.pack(self.FORMAT, FS, self.version, self.type, self.arg, self.payload_length, self.payload)
+        frame = struct.pack(self.FORMAT, FS, self.version, self.type, self.args, self.payload_length, self.payload)
         return frame
 
 
